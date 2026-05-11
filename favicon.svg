@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Espresso background -->
+  <circle cx="16" cy="16" r="16" fill="#18100A"/>
+
+  <!-- Vintage badge ring -->
+  <circle cx="16" cy="16" r="14.5" stroke="#C9A86C" stroke-width="0.85"/>
+  <circle cx="16" cy="16" r="13"   stroke="#C9A86C" stroke-width="0.35"/>
+
+  <!-- Steam wisps (S-curves) -->
+  <path d="M12 11.5 C11 10.5 13 9.5 12 8"   stroke="#C9A86C" stroke-width="1.1" stroke-linecap="round"/>
+  <path d="M16 11   C15 10   17 9   16 7.5" stroke="#C9A86C" stroke-width="1.1" stroke-linecap="round"/>
+  <path d="M20 11.5 C19 10.5 21 9.5 20 8"   stroke="#C9A86C" stroke-width="1.1" stroke-linecap="round"/>
+
+  <!-- Cup rim -->
+  <rect x="9" y="12.5" width="13" height="1.8" rx="0.9" fill="#C9A86C"/>
+
+  <!-- Cup body (tapered mug) -->
+  <path d="M9.5 14.3 L10.5 22.8 Q10.5 23.8 11.5 23.8 L20.5 23.8 Q21.5 23.8 21.5 22.8 L22.5 14.3 Z" fill="#C9A86C"/>
+
+  <!-- C-handle -->
+  <path d="M22 17 Q27 17 27 19.5 Q27 22 22 22" stroke="#C9A86C" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Saucer -->
+  <ellipse cx="15.5" cy="25.2" rx="7" ry="1.3" fill="#C9A86C"/>
+
+  <!-- Subtle shine on cup -->
+  <path d="M13 15.5 L13 22" stroke="#18100A" stroke-width="0.8" stroke-opacity="0.25" stroke-linecap="round"/>
+</svg>
