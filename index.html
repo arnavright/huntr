@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="huntr applies to apartments for students in german cities automatically.">
+  <meta name="referrer" content="no-referrer">
+  <title>huntr waitlist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;1,400;1,500&family=Instrument+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" referrerpolicy="no-referrer">
+  <style>
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Variable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Geist Mono';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/GeistMono-Variable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --white: #FFFFFF;
+      --beige: #EDE5D8;
+      --beige-mid: #F0E9DD;
+      --beige-soft: #F5F0E8;
+      --beige-light: #FAF7F2;
+      --gray-50: #F8F8F8;
+      --gray-100: #EDEDED;
+      --gray-200: #D9D9D9;
+      --gray-300: #B5B5B5;
+      --gray-400: #999999;
+      --gray-500: #6E6E6E;
+      --gray-700: #404040;
+      --black: #0A0A0A;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --font: 'Geist', -apple-system, sans-serif;
+      --mono: 'Geist Mono', monospace;
+      --elegant: 'Instrument Sans', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--white);
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    main {
+      background:
+        linear-gradient(
+          180deg,
+          var(--beige) 0%,
+          var(--beige-mid) 13%,
+          var(--beige-soft) 25%,
+          var(--white) 38%,
+          var(--beige-light) 53%,
+          var(--beige-soft) 68%,
+          var(--white) 84%,
+          var(--beige) 100%
+        );
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .has-grain {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .has-grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+    }
+
+    .has-grain > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-wrap {
+      position: fixed;
+      top: 16px;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      pointer-events: none;
+      padding: 0 24px;
+    }
+
+    .nav {
+      width: min(800px, 100%);
+      height: 52px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px 0 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(237,229,216,0.55), rgba(240,233,221,0.4), rgba(237,229,216,0.5));
+      backdrop-filter: blur(40px) saturate(1.8) brightness(1.05);
+      -webkit-backdrop-filter: blur(40px) saturate(1.8) brightness(1.05);
+      border: 1px solid rgba(255,255,255,0.45);
+      box-shadow:
+        0 0 0 0.5px rgba(0,0,0,0.04),
+        0 2px 8px rgba(0,0,0,0.03),
+        0 8px 32px rgba(0,0,0,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        inset 0 -1px 0 rgba(255,255,255,0.12);
+      pointer-events: auto;
+      transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .nav.scrolled {
+      background: linear-gradient(135deg, rgba(255,255,255,0.72), rgba(250,247,242,0.58), rgba(255,255,255,0.68));
+      border-color: rgba(255,255,255,0.62);
+      box-shadow:
+        0 0 0 0.5px rgba(0,0,0,0.06),
+        0 4px 12px rgba(0,0,0,0.05),
+        0 16px 42px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.65),
+        inset 0 -1px 0 rgba(255,255,255,0.18);
+    }
+
+    .logo {
+      font-family: var(--font);
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-link {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--gray-500);
+      letter-spacing: 0;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--black);
+    }
+
+    .nav-cta {
+      border: 0;
+      border-radius: 8px;
+      background: var(--black);
+      color: var(--white);
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      background: var(--gray-700);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 140px 24px 100px;
+      background: transparent;
+    }
+
+    .hero-inner {
+      width: min(900px, 100%);
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.05;
+      animation: drift 20s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      top: 10%;
+      left: -10%;
+      background: #C4A87C;
+    }
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      top: 50%;
+      right: -8%;
+      background: #8B7355;
+      animation-delay: -7s;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+      to {
+        transform: translate(30px, 30px) scale(1.08);
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero h1 {
+      min-height: 3.3em;
+      margin: 0;
+      opacity: 0;
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 7vw, 4.6rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    .hero h1.typing {
+      opacity: 1;
+    }
+
+    .hero h1 span,
+    .hero h1 em {
+      display: block;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 0.9em;
+      margin-left: 4px;
+      background: var(--black);
+      vertical-align: baseline;
+      position: relative;
+      top: 0.05em;
+      animation: blink 0.85s steps(2, start) infinite;
+    }
+
+    .cursor.hidden {
+      display: none;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .hero-desc {
+      max-width: 440px;
+      margin: 28px 0 0;
+      opacity: 0;
+      color: var(--gray-500);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 2.1;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .hero-desc.show,
+    .hero-form.show,
+    .hero-note.show {
+      animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .waitlist-box {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      overflow: visible;
+    }
+
+    .hero-form {
+      margin-top: 28px;
+      opacity: 0;
+    }
+
+    .waitlist-form {
+      display: flex;
+      width: 100%;
+      border-radius: 0;
+    }
+
+    .waitlist-form input {
+      min-width: 0;
+      flex: 1;
+      height: 48px;
+      padding: 0 15px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-right: 0;
+      border-radius: 0;
+      outline: 0;
+      background: rgba(255,255,255,0.5);
+      color: var(--black);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .waitlist-form input::placeholder {
+      color: var(--gray-400);
+    }
+
+    .waitlist-form input:focus {
+      background: rgba(255,255,255,0.8);
+      border-color: rgba(0,0,0,0.28);
+    }
+
+    .waitlist-form button {
+      flex: 0 0 auto;
+      height: 48px;
+      border: 1px solid var(--black);
+      border-radius: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 0 18px;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .waitlist-form button:hover {
+      background: var(--gray-700);
+    }
+
+    .waitlist-form button:disabled {
+      cursor: wait;
+      background: var(--gray-700);
+    }
+
+    .hero-note {
+      margin-top: 16px;
+      opacity: 0;
+      color: var(--gray-400);
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .statement {
+      padding: 150px 24px 48px;
+      background: transparent;
+    }
+
+    .statement-inner {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+
+    .statement-stage {
+      position: sticky;
+      top: 22vh;
+      min-height: 58vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .statement-copy {
+      width: min(760px, 100%);
+    }
+
+    .statement-line {
+      margin: 0;
+      color: var(--gray-200);
+      font-family: var(--serif);
+      font-size: clamp(1.75rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.16;
+      letter-spacing: -0.2px;
+      transform: translateY(12px);
+      transition: color 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .statement-line em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .statement-line.lit {
+      color: var(--black);
+      transform: translateY(0);
+    }
+
+    .statement-tag {
+      margin-top: 34px;
+      opacity: 0;
+      color: var(--gray-300);
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      line-height: 1.7;
+      text-transform: uppercase;
+      transition: opacity 0.8s ease;
+    }
+
+    .statement-tag.visible {
+      opacity: 1;
+    }
+
+    .statement-image-wrap {
+      position: relative;
+      width: min(980px, 100%);
+      margin: 34vh auto 0;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .statement-image-wrap::before,
+    .statement-image-wrap::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      height: 24%;
+      pointer-events: none;
+    }
+
+    .statement-image-wrap::before {
+      top: 0;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.92), rgba(255,255,255,0));
+    }
+
+    .statement-image-wrap::after {
+      bottom: 0;
+      background: linear-gradient(to top, rgba(250,247,242,0.88), rgba(250,247,242,0));
+    }
+
+    .statement-image-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .imagine {
+      min-height: 110vh;
+      padding: 96px 24px 120px;
+      background: transparent;
+    }
+
+    .imagine-layout {
+      width: min(900px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+
+    .imagine-title-area {
+      align-self: start;
+      position: sticky;
+      top: 30vh;
+    }
+
+    .imagine-title {
+      margin: 0;
+      color: var(--gray-200);
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -1px;
+      transition: color 1s ease;
+    }
+
+    .imagine-title.visible {
+      color: var(--black);
+    }
+
+    .imagine-story {
+      padding-top: 6vh;
+    }
+
+    .imagine-block {
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .imagine-block.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .imagine-para {
+      margin: 0;
+      padding: 20px 0;
+      font-family: var(--serif);
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+      font-weight: 400;
+      line-height: 1.75;
+    }
+
+    .imagine-beat {
+      padding: 28px 0;
+      color: var(--gray-400);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      line-height: 1.8;
+      text-transform: uppercase;
+    }
+
+    .imagine-reveal {
+      padding: 12px 0 28px;
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    .imagine-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 24px 0;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .imagine-bullet {
+      padding-left: 16px;
+      border-left: 2px solid var(--gray-200);
+      color: var(--gray-500);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.2px;
+      line-height: 1.9;
+    }
+
+    .imagine-close {
+      padding: 28px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .imagine-close em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .imagine-end {
+      padding-top: 32px;
+      opacity: 0;
+      color: var(--gray-400);
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      line-height: 1.8;
+      text-transform: uppercase;
+      transition: opacity 0.8s ease;
+    }
+
+    .imagine-end.visible {
+      opacity: 1;
+    }
+
+    .outcome {
+      padding: 140px 24px;
+      background: transparent;
+    }
+
+    .outcome-inner {
+      width: min(700px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      margin-bottom: 56px;
+      color: var(--gray-400);
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 4px;
+      line-height: 1.8;
+      text-transform: uppercase;
+    }
+
+    .outcome-item {
+      display: flex;
+      gap: 34px;
+      padding: 34px 0;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .outcome-item:last-child {
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .outcome-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .outcome-num {
+      min-width: 60px;
+      color: var(--gray-200);
+      font-family: var(--font);
+      font-size: 3.5rem;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .outcome-text h3 {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .outcome-text p {
+      margin: 0;
+      color: var(--gray-500);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      line-height: 1.9;
+    }
+
+    .proof {
+      padding: 44px 24px;
+      text-align: center;
+      background: rgba(255,255,255,0.56);
+      border-top: 1px solid rgba(0,0,0,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .proof-label {
+      margin-bottom: 18px;
+      color: var(--gray-400);
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 4px;
+      line-height: 1.8;
+      text-transform: uppercase;
+    }
+
+    .proof-names {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--gray-300);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      line-height: 1.8;
+    }
+
+    .proof-name {
+      transition: color 0.2s ease;
+    }
+
+    .proof-name:hover {
+      color: var(--gray-500);
+    }
+
+    .proof-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--gray-200);
+    }
+
+    .bottom-cta {
+      padding: 160px 24px;
+      text-align: center;
+      background: transparent;
+    }
+
+    .bottom-inner {
+      width: min(520px, 100%);
+      margin: 0 auto;
+    }
+
+    .bottom-cta h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .bottom-cta h2 em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .bottom-cta p {
+      margin: 18px auto 30px;
+      color: var(--gray-500);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      line-height: 1.9;
+    }
+
+    .bottom-cta .waitlist-box {
+      margin: 0 auto;
+    }
+
+    .footer {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .footer-logo {
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+
+    .footer-tagline {
+      color: var(--gray-400);
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 1.5px;
+      line-height: 1.8;
+      text-transform: uppercase;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 100;
+      max-width: calc(100vw - 32px);
+      padding: 13px 16px;
+      border-radius: 10px;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+      line-height: 1.5;
+      transform: translate(-50%, 24px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .toast.error {
+      background: #991B1B;
+    }
+
+    .confetti-dot {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+      transition: transform 0.7s ease-out, opacity 0.7s ease-out;
+    }
+
+    @media (max-width: 768px) {
+      .nav-wrap {
+        padding: 0 16px;
+      }
+
+      .nav {
+        padding-left: 18px;
+      }
+
+      .nav-link {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 120px 20px 84px;
+      }
+
+      .hero h1 {
+        min-height: auto;
+        font-size: clamp(2.8rem, 14vw, 4.1rem);
+      }
+
+      .orb {
+        display: none;
+      }
+
+      .statement {
+        min-height: auto;
+        padding: 96px 20px;
+      }
+
+      .statement-stage {
+        position: static;
+        min-height: auto;
+        display: block;
+      }
+
+      .statement-line {
+        font-size: clamp(1.65rem, 8vw, 2.6rem);
+        line-height: 1.18;
+      }
+
+      .statement-image-wrap {
+        margin-top: 48px;
+        width: calc(100% + 40px);
+        max-width: none;
+        margin-left: -20px;
+        margin-right: -20px;
+      }
+
+      .imagine {
+        min-height: auto;
+        padding: 72px 20px 92px;
+      }
+
+      .imagine-layout {
+        grid-template-columns: 1fr;
+        gap: 44px;
+      }
+
+      .imagine-title-area {
+        position: static;
+      }
+
+      .imagine-title {
+        font-size: clamp(3rem, 16vw, 4.6rem);
+      }
+
+      .imagine-story {
+        padding-top: 0;
+      }
+
+      .outcome {
+        padding: 96px 20px;
+      }
+
+      .section-label {
+        margin-bottom: 34px;
+      }
+
+      .outcome-item {
+        flex-direction: column;
+        gap: 18px;
+        padding: 30px 0;
+      }
+
+      .outcome-num {
+        min-width: 0;
+        font-size: 2.6rem;
+      }
+
+      .bottom-cta {
+        padding: 104px 20px;
+      }
+
+      .waitlist-form {
+        flex-direction: column;
+      }
+
+      .waitlist-form input {
+        border-right: 1px solid rgba(0,0,0,0.1);
+        border-bottom: 0;
+      }
+
+      .waitlist-form input:focus {
+        border-color: rgba(0,0,0,0.28);
+      }
+
+      .waitlist-form button {
+        width: 100%;
+      }
+
+      .footer {
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-wrap">
+    <nav class="nav" aria-label="primary">
+      <a class="logo" href="#top" aria-label="huntr home">huntr</a>
+      <div class="nav-actions">
+        <a class="nav-link" href="#how-it-works">how it works</a>
+        <a class="nav-cta" href="#join">join waitlist</a>
+      </div>
+    </nav>
+  </div>
+
+  <main id="top">
+    <section class="hero has-grain" aria-labelledby="hero-title">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="hero-inner">
+        <h1 id="hero-title" aria-label="the agent that hunts apartments for you."></h1>
+        <p class="hero-desc">set your criteria. upload your docs once. huntr applies to matching apartments automatically — faster than humanly possible.</p>
+        <div class="waitlist-box hero-form">
+          <form class="waitlist-form">
+            <input type="email" name="email" placeholder="your@email.de" autocomplete="email" inputmode="email" maxlength="320" spellcheck="false" autocapitalize="none" required aria-label="email address">
+            <button type="submit">join waitlist</button>
+          </form>
+        </div>
+        <div class="hero-note">free early access · no spam · just apartments</div>
+      </div>
+    </section>
+
+    <section class="statement has-grain" id="how-it-works" aria-labelledby="statement-title">
+      <div class="statement-inner">
+        <div class="statement-stage">
+          <div class="statement-copy">
+            <h2 id="statement-title" class="statement-line">we get it.</h2>
+            <div class="statement-line">apartment hunting in germany</div>
+            <div class="statement-line"><em>is exhausting.</em></div>
+            <div class="statement-line">the endless refreshing,</div>
+            <div class="statement-line">the copy-pasted messages,</div>
+            <div class="statement-line">the silence from landlords.</div>
+            <div class="statement-line">we built huntr so you</div>
+            <div class="statement-line"><em>never have to do that again.</em></div>
+            <div class="statement-tag">that's a promise, not a pitch.</div>
+          </div>
+        </div>
+        <figure class="statement-image-wrap">
+          <img src="assets/huntr-city-park.jpg" alt="students relaxing in a city park below an apartment skyline">
+        </figure>
+      </div>
+    </section>
+
+    <section class="imagine has-grain" aria-labelledby="imagine-title">
+      <div class="imagine-layout">
+        <div class="imagine-title-area">
+          <h2 class="imagine-title" id="imagine-title">imagine<br>this</h2>
+        </div>
+        <div class="imagine-story">
+          <p class="imagine-block imagine-para">it's a tuesday morning. you're sitting in a lecture, half worried about being homeless, half pretending to pay attention to what the professor is saying.</p>
+          <div class="imagine-block imagine-beat">* your phone buzzes *</div>
+          <div class="imagine-block imagine-reveal">it's huntr.</div>
+          <div class="imagine-block imagine-bullets">
+            <div class="imagine-bullet">5 applications were sent before 9am. a landlord already replied — they want to schedule a viewing this week.</div>
+            <div class="imagine-bullet">you didn't mass-apply anywhere. you didn't surf ten different portals. you didn't craft a single message trying to convince a landlord to give you a chance. huntr did all of that for you.</div>
+          </div>
+          <div class="imagine-block imagine-close">huntr has your back. <em>you're not going to be homeless.</em></div>
+          <div class="imagine-end">this is what we're building.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="outcome has-grain" aria-labelledby="outcome-title">
+      <div class="outcome-inner">
+        <div class="section-label" id="outcome-title">what changes</div>
+        <div class="outcome-item">
+          <div class="outcome-num">01</div>
+          <div class="outcome-text">
+            <h3>you wake up to applications already sent.</h3>
+            <p>while you slept, huntr found three new listings that matched your criteria and applied to all of them. you didn't lift a finger.</p>
+          </div>
+        </div>
+        <div class="outcome-item">
+          <div class="outcome-num">02</div>
+          <div class="outcome-text">
+            <h3>you're first in line, every time.</h3>
+            <p>listings go live and your application lands within minutes — not hours. no more showing up late to an inbox of two hundred.</p>
+          </div>
+        </div>
+        <div class="outcome-item">
+          <div class="outcome-num">03</div>
+          <div class="outcome-text">
+            <h3>the paperwork handles itself.</h3>
+            <p>schufa, income proof, personal introduction — uploaded once, attached perfectly, every single time. in the right language, in the right format.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof" aria-label="built for students at">
+      <div class="proof-label">built for students at</div>
+      <div class="proof-names">
+        <span class="proof-name">TUM</span><span class="proof-dot"></span>
+        <span class="proof-name">LMU</span><span class="proof-dot"></span>
+        <span class="proof-name">TU Berlin</span><span class="proof-dot"></span>
+        <span class="proof-name">KIT</span><span class="proof-dot"></span>
+        <span class="proof-name">RWTH Aachen</span><span class="proof-dot"></span>
+        <span class="proof-name">Goethe Uni</span><span class="proof-dot"></span>
+        <span class="proof-name">TU Darmstadt</span>
+      </div>
+    </section>
+
+    <section class="bottom-cta has-grain" id="join" aria-labelledby="join-title">
+      <div class="bottom-inner">
+        <h2 id="join-title">your next apartment is <em>waiting.</em></h2>
+        <p>join the waitlist. be the first to never write another bewerbung.</p>
+        <div class="waitlist-box">
+          <form class="waitlist-form">
+            <input type="email" name="email" placeholder="your@email.de" autocomplete="email" inputmode="email" maxlength="320" spellcheck="false" autocapitalize="none" required aria-label="email address">
+            <button type="submit">join waitlist</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-logo">huntr</div>
+    <div class="footer-tagline">built for students, by students</div>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" referrerpolicy="no-referrer"></script>
+  <script>
+    const SUPABASE_URL = '__SUPABASE_URL__';
+    const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
+
+    const nav = document.querySelector('.nav');
+    const heroTitle = document.querySelector('#hero-title');
+    const heroDesc = document.querySelector('.hero-desc');
+    const heroForm = document.querySelector('.hero-form');
+    const heroNote = document.querySelector('.hero-note');
+    const statement = document.querySelector('.statement');
+    const statementLines = Array.from(document.querySelectorAll('.statement-line'));
+    const statementTag = document.querySelector('.statement-tag');
+    const imagine = document.querySelector('.imagine');
+    const imagineTitle = document.querySelector('.imagine-title');
+    const imagineBlocks = Array.from(document.querySelectorAll('.imagine-block'));
+    const imagineEnd = document.querySelector('.imagine-end');
+    const toast = document.querySelector('.toast');
+    const confettiColors = ['#0A0A0A', '#6E6E6E', '#999999', '#B5B5B5', '#D9D9D9'];
+
+    let supabaseClient = null;
+    let ticking = false;
+    let toastTimer = null;
+
+    const supabaseConfigured = (
+      SUPABASE_URL.startsWith('https://') &&
+      SUPABASE_URL.includes('.supabase.co') &&
+      SUPABASE_URL !== 'https://your-project.supabase.co' &&
+      SUPABASE_ANON_KEY !== 'your-public-anon-key'
+    );
+
+    if (supabaseConfigured && window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+      console.warn('supabase waitlist is not configured yet. replace SUPABASE_URL and SUPABASE_ANON_KEY before production. submissions will succeed locally for now.');
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function typeHero() {
+      const lines = [
+        { text: 'the agent that', tag: 'span' },
+        { text: 'hunts apartments', tag: 'em' },
+        { text: 'for you.', tag: 'span' }
+      ];
+      const cursor = document.createElement('i');
+      cursor.className = 'cursor';
+      cursor.setAttribute('aria-hidden', 'true');
+
+      heroTitle.classList.add('typing');
+
+      for (let i = 0; i < lines.length; i += 1) {
+        const line = document.createElement(lines[i].tag);
+        heroTitle.appendChild(line);
+        line.appendChild(cursor);
+
+        for (const char of lines[i].text) {
+          cursor.remove();
+          line.textContent += char;
+          line.appendChild(cursor);
+          await sleep(45 + Math.random() * 30);
+        }
+
+        if (i < lines.length - 1) {
+          await sleep(180);
+        }
+      }
+
+      await sleep(200);
+      cursor.classList.add('hidden');
+      heroDesc.classList.add('show');
+      setTimeout(() => heroForm.classList.add('show'), 100);
+      setTimeout(() => heroNote.classList.add('show'), 200);
+    }
+
+    function updateStatement() {
+      const rect = statement.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const revealStart = vh * 0.68;
+      const revealRange = vh * 0.58;
+      const progress = Math.max(0, Math.min(1, (revealStart - rect.top) / revealRange));
+      let allLit = true;
+      const litCount = statementLines.filter((_, i) => progress >= (i + 0.35) / statementLines.length).length;
+
+      statementLines.forEach((line, i) => {
+        const isLit = i < litCount;
+        line.classList.toggle('lit', isLit);
+        if (!isLit) {
+          allLit = false;
+        }
+      });
+
+      statementTag.classList.toggle('visible', allLit);
+    }
+
+    function updateImagine() {
+      const threshold = window.innerHeight * 0.78;
+      let allVisible = true;
+
+      imagineBlocks.forEach(block => {
+        const rect = block.getBoundingClientRect();
+        const visible = rect.top <= threshold;
+        block.classList.toggle('visible', visible);
+        if (!visible) {
+          allVisible = false;
+        }
+      });
+
+      imagineEnd.classList.toggle('visible', allVisible);
+    }
+
+    function onScrollFrame() {
+      nav.classList.toggle('scrolled', window.scrollY > 30);
+      updateStatement();
+      updateImagine();
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(onScrollFrame);
+      }
+    }
+
+    function showToast(message, isError = false) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.toggle('error', isError);
+      toast.classList.add('visible');
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 3500);
+    }
+
+    function spawnConfetti(button, box) {
+      const buttonRect = button.getBoundingClientRect();
+      const boxRect = box.getBoundingClientRect();
+      const centerX = buttonRect.left + buttonRect.width / 2 - boxRect.left;
+      const centerY = buttonRect.top + buttonRect.height / 2 - boxRect.top;
+
+      for (let i = 0; i < 24; i += 1) {
+        const dot = document.createElement('span');
+        const angle = (Math.PI * 2 * i) / 24 + (Math.random() - 0.5) * 0.45;
+        const distance = 30 + Math.random() * 40;
+        const size = 3 + Math.random() * 4;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+
+        dot.className = 'confetti-dot';
+        dot.style.left = `${centerX}px`;
+        dot.style.top = `${centerY}px`;
+        dot.style.width = `${size}px`;
+        dot.style.height = `${size}px`;
+        dot.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+        dot.style.marginLeft = `${-size / 2}px`;
+        dot.style.marginTop = `${-size / 2}px`;
+        box.appendChild(dot);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            dot.style.transform = `translate(${dx}px, ${dy}px) scale(0)`;
+            dot.style.opacity = '0';
+          });
+        });
+
+        setTimeout(() => dot.remove(), 800);
+      }
+    }
+
+    async function submitEmail(email) {
+      if (!supabaseClient) {
+        console.info('waitlist submission accepted locally because supabase is not configured.');
+        return { duplicate: false };
+      }
+
+      const { error } = await supabaseClient
+        .from('waitlist')
+        .insert({ email });
+
+      if (error) {
+        if (error.code === '23505') {
+          return { duplicate: true };
+        }
+        throw error;
+      }
+
+      return { duplicate: false };
+    }
+
+    document.querySelectorAll('.waitlist-form').forEach(form => {
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        const input = form.querySelector('input[type="email"]');
+        const button = form.querySelector('button');
+        const box = form.closest('.waitlist-box');
+        const email = input.value.trim().toLowerCase();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email || email.length > 320 || !emailPattern.test(email)) {
+          showToast('please enter a valid email under 320 characters.', true);
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = 'joining...';
+
+        try {
+          const result = await submitEmail(email);
+          spawnConfetti(button, box);
+          showToast(result.duplicate ? "you're already on the list ✓" : "you're on the list ✓");
+          form.reset();
+        } catch (error) {
+          if (error && error.code === 'PGRST205') {
+            console.error('waitlist submission failed: public.waitlist was not found in supabase. run supabase/waitlist.sql in the Supabase SQL editor for this project.', { code: error.code });
+          } else {
+            console.error('waitlist submission failed', { code: error && error.code ? error.code : 'unknown' });
+          }
+          showToast('something went wrong. try again in a moment.', true);
+        } finally {
+          button.disabled = false;
+          button.textContent = 'join waitlist';
+        }
+      });
+    });
+
+    const imagineObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          imagineTitle.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    imagineObserver.observe(imagine);
+
+    const outcomeObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const items = Array.from(entry.target.querySelectorAll('.outcome-item'));
+          items.forEach((item, i) => {
+            setTimeout(() => item.classList.add('visible'), i * 150);
+          });
+          outcomeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    outcomeObserver.observe(document.querySelector('.outcome'));
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('load', () => {
+      setTimeout(typeHero, 500);
+      onScroll();
+    });
+  </script>
+</body>
+</html>
